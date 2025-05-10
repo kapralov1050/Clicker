@@ -1,11 +1,35 @@
 import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
-import type { Achievement, Bonus, LevelProp, Profit } from '@/types/common'
+import type { Achievement, Bonus, Profit } from '@/types/common'
 import { Levels } from '@/constants'
-import { throttle } from 'lodash';
+import { throttle } from 'lodash'
 
 export const useGameStore = defineStore('gameStore', () => {
-  
+
+  const bonuses: Bonus[] = [
+    {
+      name: 'Двойной клик',
+      duration: Math.floor(Math.random() * (30 - 1)) + 1,
+      cooldown: 15,
+      action: () => manualClick.value *= 2,
+      end: () => manualClick.value /= 2
+    },
+    {
+      name: 'Двойной автоклик',
+      duration: Math.floor(Math.random() * (30 - 1)) + 1,
+      cooldown: 10,
+      action: () => autoClick.value *= 2,
+      end: () => autoClick.value /= 2
+    },
+    {
+      name: 'Шанс критического клика +30%',
+      duration: Math.floor(Math.random() * (30 - 1)) + 1,
+      cooldown: 10,
+      action: () => luckyChance.value += 0.3,
+      end: () => luckyChance.value -= 0.3
+    }
+  ]
+
   const autoClick = ref(0)
   const manualClick = ref(1)
   const luckyChance = ref(0.2)
@@ -18,31 +42,6 @@ export const useGameStore = defineStore('gameStore', () => {
   const clickCounter = ref(0)
   const boughtUpgrades = ref<string[]>([])
   const receivedAchievements = ref<Achievement[]>([])
-
-  const bonuses: Bonus[] = [
-    {
-        name: 'Двойной клик',
-        duration: Math.floor(Math.random() * (30 - 1)) + 1,
-        cooldown: 25,
-        action: () => manualClick.value *= 2,
-        end: () => manualClick.value /=2
-    },
-    {
-        name: 'Двойной автоклик',
-        duration: Math.floor(Math.random() * (30 - 1)) + 1,
-        cooldown: 15,
-        action: () => autoClick.value *= 2,
-        end: () => autoClick.value /=2
-    },  
-    {
-        name: 'Шанс критического клика +30%',
-        duration: Math.floor(Math.random() * (30 - 1)) + 1,
-        cooldown: 30,
-        action: () => luckyChance.value +=0.3,
-        end: () => luckyChance.value -=0.3
-    },   
-]
-
   const randomlySelectedBonus = ref<Bonus>(bonuses[0])
   const isBonusActive = ref(false)
   const bonusName = ref('')
@@ -50,7 +49,7 @@ export const useGameStore = defineStore('gameStore', () => {
   const bonusDuration = ref(0)
   const isBonusFalling = ref(false)
   const fallingBonusCoordinate = ref('65vw')
-  
+
   const isBonusDropped = computed(() => {
     const dropChance = 0.3
     if (currentClickRate.value > 5 && bonusCooldown.value === 0) {
@@ -81,7 +80,7 @@ export const useGameStore = defineStore('gameStore', () => {
   const currentLevelProgress = computed(() => {
     const levelEnd = Levels[currentLevel.value + 1].requiredCurrency
     const levelStart = Levels[currentLevel.value].requiredCurrency
-    return ((xp.value - levelStart)/(levelEnd - levelStart)) * 400
+    return ((xp.value - levelStart) / (levelEnd - levelStart)) * 400
   })
 
   const currentProfit = computed((): Profit => {
@@ -93,9 +92,9 @@ export const useGameStore = defineStore('gameStore', () => {
   const leftToNextLevel = computed(() => Levels[currentLevel.value + 1].requiredCurrency)
 
   watch(currentProfit, (newVal: Profit) => {
-    const {bonus, color, skin} = newVal
+    const { bonus, color, skin } = newVal
     currentColor.value = color
-    manualClick.value += bonus 
+    manualClick.value += bonus
     if (skin) currentSkin.value = skin
   })
 
@@ -106,35 +105,33 @@ export const useGameStore = defineStore('gameStore', () => {
     }, 1000)
   )
 
+  watch(isBonusDropped, () => {
+    isBonusFalling.value = true
+    setTimeout(() => {
+      isBonusFalling.value = false
+      fallingBonusCoordinate.value = (Math.floor(Math.random() * (65 - 25)) + 25) + "vw"
+    }, 6000)
+  })
 
-  watch(isBonusDropped, (newValue, oldValue) => {
-      isBonusFalling.value = true
-      setTimeout(() => {
-        isBonusFalling.value = false
-        fallingBonusCoordinate.value = (Math.floor(Math.random() * (65 - 25)) + 25) + "vw"
-      }, 6000)
-    }
-  )
-  
-  return { 
+  return {
     xp,
     formattedXp,
     manualClick,
-    cpsValue, 
-    autoClick, 
+    cpsValue,
+    autoClick,
     luckyChance,
-    currency, 
-    currentClickRate, 
-    clickCounter, 
-    boughtUpgrades, 
+    currency,
+    currentClickRate,
+    clickCounter,
+    boughtUpgrades,
     receivedAchievements,
-    formattedCurrency, 
-    savedProgress, 
+    formattedCurrency,
+    savedProgress,
     currentLevel,
     currentLevelProgress,
     currentSkin,
     leftToNextLevel,
-    maxCurrency, 
+    maxCurrency,
     currentColor,
     bonuses,
     randomlySelectedBonus,

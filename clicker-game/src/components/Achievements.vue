@@ -1,7 +1,12 @@
 <template>
-  <button @click="toggleAchievementsList"> Достижения </button>
-  <div class="achievements" v-show="isAchievementsListOpen">
-    <h1> Достижения </h1>
+  <button @click="toggleAchievementsList">
+    Достижения
+  </button>
+  <div 
+    class="achievements" 
+    v-show="isAchievementsListOpen"
+  >
+    <h1>Достижения</h1>
     <p v-for="ach in gameStore.receivedAchievements">
       {{ ach.achievement }}
     </p>
@@ -9,18 +14,17 @@
 </template>
 
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useGameStore } from '@/stores/game';
 import type { Achievement } from '@/types/common';
 import { ref, watch } from 'vue';
 
-const gameStore = useGameStore()
-
-const isAchievementsListOpen = ref(false)
+const gameStore = useGameStore();
+const isAchievementsListOpen = ref(false);
 
 const toggleAchievementsList = () => {
-  isAchievementsListOpen.value = !isAchievementsListOpen.value
-}
+  isAchievementsListOpen.value = !isAchievementsListOpen.value;
+};
 
 const achievementsList = ref<Achievement[]>([
   {
@@ -52,7 +56,7 @@ const achievementsList = ref<Achievement[]>([
     required: () => gameStore.autoClick > gameStore.manualClick
   },
   {
-    achievement: '"Быдлокодер -> Senior" — Прошёл весь путь эволюции (из обезьяны в архитектора).',
+    achievement: '"Джуниор -> Senior" — Прошёл весь путь эволюции (из обезьяны в архитектора).',
     required: () => gameStore.currentLevel === 20
   },
   {
@@ -63,26 +67,29 @@ const achievementsList = ref<Achievement[]>([
     achievement: '"Поменял стек технологий" — Сбросил все улучшения и начал заново.',
     required: () => gameStore.maxCurrency === -1
   }
-])
+]);
 
-watch(() => [
+watch(
+  () => [
     gameStore.autoClick,
     gameStore.currentLevel,
     gameStore.manualClick,
     gameStore.maxCurrency
-  ], () => { 
-  let fulflled = achievementsList.value.filter( ach => ach.required())
+  ], 
+  () => {
+    let fulfilled = achievementsList.value.filter(ach => ach.required());
 
-  fulflled.forEach(ach => {
-    if(!gameStore.receivedAchievements.some(( r => r.achievement === ach.achievement ))) {
-      gameStore.receivedAchievements.push(ach)
-    }
-  })
-})
+    fulfilled.forEach(ach => {
+      if (!gameStore.receivedAchievements.some(r => r.achievement === ach.achievement)) {
+        gameStore.receivedAchievements.push(ach);
+      }
+    });
+  }
+);
 </script>
 
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .achievements {
   position: absolute;
   z-index: 1000;

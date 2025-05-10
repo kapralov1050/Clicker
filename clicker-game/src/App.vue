@@ -1,42 +1,42 @@
 <template>
-<div class="container no-selection">
-  <img :src="`${backgroundImageLink}`" class="bg-image">
-  <div class="content" v-show="isTurnedOn">
-    <BoostActions  @catch="activateBonus"/>
-    <div class="main-field">
-      <div class="main-field__block">
-        <ClickerButton class="main-field__clicker" @increase="increaseValue"/>
-        <p v-show="gameStore.isBonusActive" :class="{bonus: gameStore.isBonusActive}">
-          {{ gameStore.bonusName }}
-        </p>
-        <p v-show="gameStore.isBonusActive">
-         {{ gameStore.bonusName }} {{ gameStore.bonusDuration }}
-        </p>
-        <Achievements />
+  <div class="container no-selection">
+    <img :src="`${backgroundImageLink}`" class="bg-image">
+    <div class="content" v-show="isTurnedOn">
+      <BoostActions @catch="activateBonus"/>
+      <div class="main-field">
+        <div class="main-field__block">
+          <ClickerButton class="main-field__clicker" @increase="increaseValue"/>
+          <p v-show="gameStore.isBonusActive" :class="{bonus: gameStore.isBonusActive}">
+            {{ gameStore.bonusName }}
+          </p>
+          <p v-show="gameStore.isBonusActive">
+            {{ gameStore.bonusName }} {{ gameStore.bonusDuration }}
+          </p>
+          <Achievements />
+        </div>
+        <div class="main-field__block">
+          <p>Вы зарабатываете {{ gameStore.cpsValue.toFixed(1) }} опыта в секунду</p>
+          <p class="main-field__currency">{{ gameStore.formattedCurrency }}</p>
+          <ProgressBar :progress="gameStore.currentLevelProgress"/>
+          <p>Уровень: {{ gameStore.currentLevel }}</p>
+        </div>
       </div>
-      <div class="main-field__block">
-        <p> Вы зарабатываете {{ gameStore.cpsValue.toFixed(1) }} опыта в секунду</p>
-        <p class="main-field__currency"> {{ gameStore.formattedCurrency }} </p>
-        <ProgressBar :progress="gameStore.currentLevelProgress"/>
-        <p> Уровень: {{ gameStore.currentLevel }}</p>
+      <div class="shop">
+        <h2>Стек</h2>
+        <UpgradesPanel @buy="buyUpgrade"/>
       </div>
     </div>
-    <div class="shop">
-      <h2> Стек </h2>
-      <UpgradesPanel @buy="buyUpgrade" />
-    </div>
+    <button class="help-buttons reset" @click="handleReset">
+      Reset
+    </button>
+    <button class="help-buttons power-button" @click="toggleBackground">
+      {{ isTurnedOn ? "Off" : "On" }}
+    </button>
   </div>
-  <button class="help-buttons reset" @click="handleReset">
-    Reset
-  </button>
-  <button class="help-buttons power-button" @click="toggleBackground">
-    {{ isTurnedOn ? "Off" : "On" }}
-  </button>
-</div>
 </template>
 
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { useGameStore } from "./stores/game";
 import { useAutoClick } from "./composables/useAutoClick";
@@ -49,77 +49,77 @@ import BoostActions from "./components/BoostActions.vue";
 import { useBonus } from "./composables/useBonus";
 import Achievements from "./components/Achievements.vue";
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 
-const { clickerLoop } = useAutoClick()
-const { increaseValue } = useManualCLick()
-const { buyUpgrade } = useUpgrades()
-const { activateBonus } = useBonus()
+const { clickerLoop } = useAutoClick();
+const { increaseValue } = useManualCLick();
+const { buyUpgrade } = useUpgrades();
+const { activateBonus } = useBonus();
 
 const handleReset = () => {
-    localStorage.removeItem("score")
-    gameStore.xp = 0
-    gameStore.currency = 0
-    gameStore.autoClick = 0
-    gameStore.maxCurrency = -1
-    gameStore.currentColor = 'gray'
-    gameStore.boughtUpgrades = []
-    gameStore.currentSkin = '/icons/1.png'
-    gameStore.receivedAchievements = []
-}
+  localStorage.removeItem("score");
+  gameStore.xp = 0;
+  gameStore.currency = 0;
+  gameStore.autoClick = 0;
+  gameStore.maxCurrency = -1;
+  gameStore.currentColor = "gray";
+  gameStore.boughtUpgrades = [];
+  gameStore.currentSkin = "/icons/1.png";
+  gameStore.receivedAchievements = [];
+};
 
-const backgroundImageLink = ref('../icons/background3-inactive.png')
-const isTurnedOn = ref(false)
+const backgroundImageLink = ref("../icons/background3-inactive.png");
+const isTurnedOn = ref(false);
 
 const toggleBackground = () => {
-  if(isTurnedOn.value) {
-    backgroundImageLink.value = '../icons/background3-inactive.png'
+  if (isTurnedOn.value) {
+    backgroundImageLink.value = "../icons/background3-inactive.png";
   } else {
-    backgroundImageLink.value = '../icons/background2-active.png'
+    backgroundImageLink.value = "../icons/background2-active.png";
   }
 
-  isTurnedOn.value = !isTurnedOn.value
-}
+  isTurnedOn.value = !isTurnedOn.value;
+};
 
-let intervalId: number
+let intervalId: number;
 
 onMounted(() => {
-  clickerLoop()
+  clickerLoop();
 
-  const savedState = JSON.parse(localStorage.getItem("score") || 'null')
-  const {score, maxScore, clickStep, upgrades} = savedState
-  gameStore.currency = score
-  gameStore.autoClick = clickStep
-  gameStore.boughtUpgrades = upgrades
-  gameStore.maxCurrency = maxScore
+  const savedState = JSON.parse(localStorage.getItem("score") || "null");
+  const { score, maxScore, clickStep, upgrades } = savedState;
+  gameStore.currency = score;
+  gameStore.autoClick = clickStep;
+  gameStore.boughtUpgrades = upgrades;
+  gameStore.maxCurrency = maxScore;
 
   intervalId = setInterval(() => {
-      gameStore.currentClickRate = gameStore.clickCounter
-      gameStore.xp += gameStore.autoClick * 0.2
-      gameStore.clickCounter = 0
-    }, 1000 )
-})
+    gameStore.currentClickRate = gameStore.clickCounter;
+    gameStore.xp += gameStore.autoClick * 0.2;
+    gameStore.clickCounter = 0;
+  }, 1000);
+});
 
 onUnmounted(() => {
-    clearInterval(intervalId)
-})
+  clearInterval(intervalId);
+});
 </script>
 
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .no-selection {
-  user-select: none; 
+  user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
 }
 
 .container {
-  position: relative;
+  position: fixed;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -129,9 +129,9 @@ onUnmounted(() => {
 }
 
 .bg-image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
   object-fit: cover;
   z-index: -1;
   top: 0;
@@ -143,8 +143,10 @@ onUnmounted(() => {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 5rem;
+  gap: 4rem;
   padding-bottom: 15rem;
+  width: 1200px;
+  margin: 0 auto;
 }
 
 .achievements {
@@ -214,14 +216,14 @@ onUnmounted(() => {
 }
 
 .power-button {
-  bottom: 24.5rem;
+  bottom: 13rem;
   background-color: rgb(190, 87, 87);
-  right: 36rem;
+  right: 52%;
 }
 
 .reset {
-  bottom: 24.5rem;
-  right: 30rem;
+  bottom: 13rem;
+  right: 48%;
   background-color: rgb(107, 107, 107);
 }
 

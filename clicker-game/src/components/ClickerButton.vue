@@ -1,18 +1,18 @@
 <template>
-  <button @click="$emit('increase')" > 
-    <img :src="`${gameStore.currentSkin}`"/>
+  <button @click="$emit('increase')">
+    <img :src="gameStore.currentSkin" />
   </button>
 </template>
 
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useGameStore } from '@/stores/game';
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 </script>
 
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 button {
   font-size: 2rem;
   font-weight: bold;
@@ -24,12 +24,12 @@ button {
 }
 
 img {
- object-fit: none;
+  object-fit: none;
   -webkit-user-drag: none;
 }
 
 button:active {
   transform: translateY(0.5rem) translateX(0.5rem) scale(1.05);
-  background: radial-gradient(rgb(245, 191, 110), white)
+  background: radial-gradient(rgb(245, 191, 110), white);
 }
 </style>

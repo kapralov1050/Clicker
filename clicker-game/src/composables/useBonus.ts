@@ -28,7 +28,7 @@ export const useBonus = () => {
         clearInterval(timerId)
         bonus.end()
         timerId = setInterval(() => {
-          if (gameStore.bonusCooldown === 0)  {
+          if (gameStore.bonusCooldown === 0) {
             clearInterval(timerId)
           } else {
             gameStore.bonusCooldown--

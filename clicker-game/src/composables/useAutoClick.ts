@@ -1,23 +1,22 @@
-import { useGameStore } from "@/stores/game"
+import { useGameStore } from "@/stores/game";
 
 export const useAutoClick = () => {
-  const gameStore = useGameStore()
-
-  let lastTime = performance.now()
+  const gameStore = useGameStore();
+  let lastTime = performance.now();
 
   function clickerLoop() {
-    const now = performance.now()
-    const difference = now - lastTime
-    lastTime = now
+    const now = performance.now();
+    const deltaTime = now - lastTime;
+    lastTime = now;
 
-    gameStore.currency += gameStore.autoClick * (difference / 1000)
+    gameStore.currency += gameStore.autoClick * (deltaTime / 1000);
 
-  if (gameStore.currency > gameStore.maxCurrency) {
-    gameStore.maxCurrency = gameStore.currency
+    if (gameStore.currency > gameStore.maxCurrency) {
+      gameStore.maxCurrency = gameStore.currency;
+    }
+
+    requestAnimationFrame(clickerLoop);
   }
 
-    requestAnimationFrame(clickerLoop)
-  }
-
-  return { clickerLoop }
-}
+  return { clickerLoop };
+};
