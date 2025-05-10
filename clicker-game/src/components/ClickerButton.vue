@@ -18,7 +18,6 @@ button {
   font-weight: bold;
   color: #fff;
   border: none;
-  border-radius: 12px;
   cursor: pointer;
   filter: brightness(1.15);
   transition: all 0.2s ease;
@@ -30,6 +29,7 @@ img {
 }
 
 button:active {
-  transform: translateY(-1rem) translateX(1rem) scale(0.98);
+  transform: translateY(0.5rem) translateX(0.5rem) scale(1.05);
+  background: radial-gradient(rgb(245, 191, 110), white)
 }
 </style>
