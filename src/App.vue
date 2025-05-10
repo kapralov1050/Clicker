@@ -5,20 +5,23 @@
       <BoostActions @catch="activateBonus"/>
       <div class="main-field">
         <div class="main-field__block">
-          <ClickerButton class="main-field__clicker" @increase="increaseValue"/>
-          <p v-show="gameStore.isBonusActive" :class="{bonus: gameStore.isBonusActive}">
+          <ClickerButton @increase="increaseValue" />
+          <p 
+            v-show="gameStore.isBonusActive" 
+            :class="{bonus: gameStore.isBonusActive}"
+          >
             {{ gameStore.bonusName }}
           </p>
           <p v-show="gameStore.isBonusActive">
             {{ gameStore.bonusName }} {{ gameStore.bonusDuration }}
           </p>
-          <Achievements />
         </div>
         <div class="main-field__block">
           <p>Вы зарабатываете {{ gameStore.cpsValue.toFixed(1) }} опыта в секунду</p>
           <p class="main-field__currency">{{ gameStore.formattedCurrency }}</p>
           <ProgressBar :progress="gameStore.currentLevelProgress"/>
           <p>Уровень: {{ gameStore.currentLevel }}</p>
+          <PlayerAchievements />
         </div>
       </div>
       <div class="shop">
@@ -47,7 +50,7 @@ import UpgradesPanel from "./components/UpgradesPanel.vue";
 import ProgressBar from "./components/ProgressBar.vue";
 import BoostActions from "./components/BoostActions.vue";
 import { useBonus } from "./composables/useBonus";
-import Achievements from "./components/Achievements.vue";
+import PlayerAchievements from "./components/PlayerAchievements.vue";
 
 const gameStore = useGameStore();
 
@@ -60,7 +63,7 @@ const handleReset = () => {
   localStorage.removeItem("score");
   gameStore.xp = 0;
   gameStore.currency = 0;
-  gameStore.autoClick = 0;
+  gameStore.autoClick = 0.001;
   gameStore.maxCurrency = -1;
   gameStore.currentColor = "gray";
   gameStore.boughtUpgrades = [];
@@ -87,11 +90,25 @@ onMounted(() => {
   clickerLoop();
 
   const savedState = JSON.parse(localStorage.getItem("score") || "null");
-  const { score, maxScore, clickStep, upgrades } = savedState;
+  const { 
+          score,
+          maxScore,
+          autoclick,
+          upgrades,
+          xp,
+          currentSkin,
+          currentColor,
+          achievements
+         } = savedState;
+
   gameStore.currency = score;
-  gameStore.autoClick = clickStep;
+  gameStore.autoClick = autoclick;
   gameStore.boughtUpgrades = upgrades;
   gameStore.maxCurrency = maxScore;
+  gameStore.xp = xp;
+  gameStore.currentSkin = currentSkin;
+  gameStore.currentColor = currentColor;
+  gameStore.receivedAchievements = achievements;
 
   intervalId = setInterval(() => {
     gameStore.currentClickRate = gameStore.clickCounter;
@@ -143,7 +160,7 @@ onUnmounted(() => {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 4rem;
+
   padding-bottom: 15rem;
   width: 1200px;
   margin: 0 auto;
@@ -167,7 +184,7 @@ onUnmounted(() => {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  gap: 2rem;
+  gap: 4rem;
 
   &__block {
     display: flex;

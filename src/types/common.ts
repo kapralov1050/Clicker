@@ -11,27 +11,7 @@ export interface LevelProp {
 
 export interface Profit {
   bonus: number;
-  color:
-    | 'none'
-    | 'blue'
-    | 'red'
-    | 'green'
-    | 'purple'
-    | 'orange'
-    | 'gold'
-    | 'teal'
-    | 'violet'
-    | 'maroon'
-    | 'navy'
-    | 'lime'
-    | 'crimson'
-    | 'indigo'
-    | 'coral'
-    | 'skyblue'
-    | 'olive'
-    | 'salmon'
-    | 'plum'
-    | 'steelblue';
+  color: string;
   skin?: string;
 }
 

@@ -24,7 +24,7 @@ const emit = defineEmits<{
 }>();
 
 const handleBonusCatch = (bonus: Bonus) => {
-  emit('catch', gameStore.randomlySelectedBonus);
+  emit('catch', bonus);
 };
 </script>
 

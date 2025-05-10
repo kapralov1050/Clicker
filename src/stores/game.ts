@@ -65,8 +65,12 @@ export const useGameStore = defineStore('gameStore', () => {
   const savedProgress = computed(() => ({
     score: currency.value,
     maxScore: maxCurrency.value,
-    clickStep: autoClick.value,
-    upgrades: boughtUpgrades.value
+    autoclick: autoClick.value,
+    upgrades: boughtUpgrades.value,
+    xp: xp.value,
+    currentColor: currentColor.value,
+    currentSkin: currentSkin.value,
+    achievements: receivedAchievements.value
   }))
 
   const cpsValue = computed(() => autoClick.value + currentClickRate.value)

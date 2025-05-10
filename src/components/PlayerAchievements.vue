@@ -1,13 +1,13 @@
 <template>
-  <button @click="toggleAchievementsList">
+  <button
+    @click="toggleAchievementsList">
     Достижения
   </button>
-  <div 
-    class="achievements" 
-    v-show="isAchievementsListOpen"
-  >
+  <div class="achievements"
+    v-show="isAchievementsListOpen">
     <h1>Достижения</h1>
-    <p v-for="ach in gameStore.receivedAchievements">
+    <p v-for="(ach, index) in gameStore.receivedAchievements"
+      :key="index">
       {{ ach.achievement }}
     </p>
   </div>
@@ -37,7 +37,7 @@ const achievementsList = ref<Achievement[]>([
   },
   {
     achievement: '"Пассивный заработок" — Получил первый автоклик.',
-    required: () => gameStore.autoClick > 0
+    required: () => gameStore.autoClick > 0.01
   },
   {
     achievement: '"Зачем спать? Есть кофе" — Достиг 5 уровня (и 5-й чашки кофе).',
@@ -75,9 +75,9 @@ watch(
     gameStore.currentLevel,
     gameStore.manualClick,
     gameStore.maxCurrency
-  ], 
+  ],
   () => {
-    let fulfilled = achievementsList.value.filter(ach => ach.required());
+    const fulfilled = achievementsList.value.filter(ach => ach.required());
 
     fulfilled.forEach(ach => {
       if (!gameStore.receivedAchievements.some(r => r.achievement === ach.achievement)) {
