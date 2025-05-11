@@ -30,7 +30,7 @@ export const useGameStore = defineStore('gameStore', () => {
     }
   ]
 
-  const autoClick = ref(0)
+  const autoClick = ref(0.1)
   const manualClick = ref(1)
   const luckyChance = ref(0.2)
   const xp = ref(0)

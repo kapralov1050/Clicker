@@ -37,7 +37,7 @@ const achievementsList = ref<Achievement[]>([
   },
   {
     achievement: '"Пассивный заработок" — Получил первый автоклик.',
-    required: () => gameStore.autoClick > 0.01
+    required: () => gameStore.autoClick > 1
   },
   {
     achievement: '"Зачем спать? Есть кофе" — Достиг 5 уровня (и 5-й чашки кофе).',

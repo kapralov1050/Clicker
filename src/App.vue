@@ -63,7 +63,7 @@ const handleReset = () => {
   localStorage.removeItem("score");
   gameStore.xp = 0;
   gameStore.currency = 0;
-  gameStore.autoClick = 0.001;
+  gameStore.autoClick = 0.1;
   gameStore.maxCurrency = -1;
   gameStore.currentColor = "gray";
   gameStore.boughtUpgrades = [];
