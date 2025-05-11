@@ -217,6 +217,8 @@ onUnmounted(() => {
 }
 
 .help-buttons {
+  width: 80px;
+  height: 40px;
   position: absolute;
   outline: none;
   border: 1px solid rgb(117, 117, 117);
@@ -224,7 +226,8 @@ onUnmounted(() => {
   color: rgb(221, 217, 214);
   font-size: 1.3rem;
   padding: 0.3rem;
-  border-radius: 20%;
+  border-radius: 10px;
+  bottom: 16%;
 }
 
 .help-buttons:active {
@@ -233,14 +236,12 @@ onUnmounted(() => {
 }
 
 .power-button {
-  bottom: 13rem;
   background-color: rgb(190, 87, 87);
-  right: 52%;
+  right: 53%;
 }
 
 .reset {
-  bottom: 13rem;
-  right: 48%;
+  right: 47%;
   background-color: rgb(107, 107, 107);
 }
 

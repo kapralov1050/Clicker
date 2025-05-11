@@ -55,11 +55,6 @@ function isBought(upgrade: string): boolean {
     box-shadow: 0 6px 6px rgba(63, 63, 63, 0.3);
     padding: 0.8rem;
     transition: background-color 0.2s ease;
-
-    &:disabled {
-      opacity: 0.7;
-      cursor: default;
-    }
   }
 }
 
