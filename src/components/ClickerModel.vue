@@ -9,7 +9,7 @@
 
       <Suspense>
         <GLTFModel
-          path="../../public/3d model/scene.glb"
+          path="/3d model/scene.glb"
           :scale="[modelScale.x, modelScale.y, modelScale.z]"
           :rotation="[-0.5, rotationY, 0.05]"
           @click="handleClick"
