@@ -115,7 +115,7 @@ button {
   border-radius: 0.5rem;
   outline: none;
   border: none;
-  margin: 2rem;
+  margin-bottom: 1rem;
   padding: 1rem;
 }
 </style>

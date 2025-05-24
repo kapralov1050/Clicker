@@ -22,6 +22,8 @@
 import { useGameStore } from '@/stores/game';
 import { ref } from 'vue';
 
+const gameStore = useGameStore();
+
 const emit = defineEmits(['increase'])
 
 const isClickAnimated = ref(false)
@@ -40,8 +42,6 @@ function handleClick (event: MouseEvent) {
   if (isClickAnimated.value) return
   isClickAnimated.value = true
 }
-
-const gameStore = useGameStore();
 </script>
 
 

@@ -5,7 +5,7 @@
       <BoostActions @catch="activateBonus"/>
       <div class="main-field">
         <div class="main-field__block">
-          <ClickerButton @increase="increaseValue" />
+          <img :src="gameStore.currentSkin" width="300px" height="300px"/>
           <p 
             v-show="gameStore.isBonusActive" 
             :class="{bonus: gameStore.isBonusActive}"
@@ -21,6 +21,7 @@
           <p class="main-field__currency">{{ gameStore.formattedCurrency }}</p>
           <ProgressBar :progress="gameStore.currentLevelProgress"/>
           <p>Уровень: {{ gameStore.currentLevel }}</p>
+          <ClickerModel @increase="increaseValue"/>
           <PlayerAchievements />
         </div>
       </div>
@@ -45,12 +46,12 @@ import { useGameStore } from "./stores/game";
 import { useAutoClick } from "./composables/useAutoClick";
 import { useManualCLick } from "./composables/useManualClick";
 import { useUpgrades } from "./composables/useUpgrades";
-import ClickerButton from "./components/ClickerButton.vue";
 import UpgradesPanel from "./components/UpgradesPanel.vue";
 import ProgressBar from "./components/ProgressBar.vue";
 import BoostActions from "./components/BoostActions.vue";
 import { useBonus } from "./composables/useBonus";
 import PlayerAchievements from "./components/PlayerAchievements.vue";
+import ClickerModel from "./components/ClickerModel.vue";
 
 const gameStore = useGameStore();
 
@@ -194,7 +195,7 @@ onUnmounted(() => {
   }
 
   &__currency {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 }
 
