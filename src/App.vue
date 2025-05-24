@@ -185,7 +185,7 @@ onUnmounted(() => {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  gap: 4rem;
+  gap: 1rem;
 
   &__block {
     display: flex;
